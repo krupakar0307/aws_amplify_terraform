@@ -25,6 +25,7 @@ resource "aws_amplify_app" "react_app" {
                 - node_modules/**/*
     EOT
   access_token = var.git_config.git_access_token
+  platform = "WEB_COMPUTE"
   custom_rule {
     source = "/<*>"
     status = "404-200"
@@ -36,5 +37,5 @@ resource "aws_amplify_app" "react_app" {
 resource "aws_amplify_branch" "react_branch" {
   app_id       = aws_amplify_app.react_app.id
   branch_name  = "main"
-  framework = "react"
+  framework = "Next.js - SSR"
 }
