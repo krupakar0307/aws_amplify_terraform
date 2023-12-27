@@ -3,9 +3,9 @@ provider "aws" {
 }
 
 resource "aws_amplify_app" "react_app" {
-  name        = "react-app"
-  repository  = var.git_config.repo_url
-  iam_service_role_arn = "arn:aws:iam::${var.account}:role/service-role/AmplifySSRLoggingRole-d258srhc32j5pl"
+  name        = var.app_name
+  repository  = var.git_url
+  iam_service_role_arn = aws_iam_role.amplify_role.arn
   build_spec  = <<-EOT
     version: 1
     frontend:
@@ -24,7 +24,7 @@ resource "aws_amplify_app" "react_app" {
             paths:
                 - node_modules/**/*
     EOT
-  access_token = var.git_config.git_access_token
+  access_token = var.git_access_token
   platform = "WEB_COMPUTE"
   custom_rule {
     source = "/<*>"
@@ -36,6 +36,6 @@ resource "aws_amplify_app" "react_app" {
 
 resource "aws_amplify_branch" "react_branch" {
   app_id       = aws_amplify_app.react_app.id
-  branch_name  = "main"
+  branch_name  = var.git_branch
   framework = "Next.js - SSR"
 }
